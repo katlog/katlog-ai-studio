@@ -6,7 +6,7 @@
 
 | Skill | 描述 |
 |-------|------|
-| [tech-diagram](./tech-diagram/) | 技术图表绘制工具，支持架构图、流程图、ER 图、时序图、动画演示等，基于 Mermaid 和 SVG |
+| [tech-diagram](./tech-diagram/) | 技术图表绘制工具，支持架构图、流程图、ER 图、时序图、动画演示等，基于 Mermaid 和 React Flow + dagre |
 | [geektime-downloader](./geektime-downloader/) | 极客时间课程下载与整理，自动识别课程类型（图文/视频），支持视频转录和内容摘要 |
 | [import-md-to-wecom-doc](./import-md-to-wecom-doc/) | 将 Markdown 导入企业微信文档，优先保证代码块、换行一致性和表格可读性 |
 | [feishu-docx-to-markdown](./feishu-docx-to-markdown/) | 将飞书 docx 文档转换为本地 Markdown，保留图片、可复制表格和嵌入 Sheet 预览图 |

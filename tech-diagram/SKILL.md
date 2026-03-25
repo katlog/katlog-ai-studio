@@ -12,23 +12,34 @@ description: |
 
 # Tech Diagram
 
-Create technical diagrams using the appropriate technology for each diagram type.
+Create technical diagrams using only two default routes:
+
+- Mermaid: simple static diagrams embedded directly in Markdown
+- React Flow + dagre: complex architecture diagrams, interactive flows, and step-based animations in single-file HTML
+
+Do not default to hand-written SVG flowcharts or SVG + anime.js animations for complex HTML diagrams.
 
 ## Technology Selection
 
 | Diagram Type | Technology | Output Format |
 |-------------|------------|---------------|
-| Architecture | SVG in HTML | `.html` file |
-| Flowchart | Mermaid | Markdown code block |
+| Simple Flowchart | Mermaid | Markdown code block |
 | ER Diagram | Mermaid | Markdown code block |
 | Sequence Diagram | Mermaid | Markdown code block |
 | State Diagram | Mermaid | Markdown code block |
 | Class Diagram | Mermaid | Markdown code block |
-| Animated Demo | SVG + anime.js | `.html` file |
+| Complex Architecture | React Flow + dagre | `.html` file |
+| Interactive Flow / Animated Demo | React Flow + dagre | `.html` file |
 
-## Mermaid Diagrams
+## Route 1: Mermaid
 
-Use Mermaid for static diagrams embedded in Markdown. See [mermaid-patterns.md](references/mermaid-patterns.md) for syntax reference.
+Use Mermaid for simple static diagrams embedded in Markdown. See [mermaid-patterns.md](references/mermaid-patterns.md) for syntax reference.
+
+### Good Fit
+- Simple linear flows
+- ER diagrams
+- Sequence diagrams
+- State/class diagrams that do not need interaction
 
 ### Flowchart Example
 ````markdown
@@ -55,87 +66,88 @@ erDiagram
 ```
 ````
 
-## SVG Architecture Diagrams
+## Route 2: React Flow + dagre
 
-Use embedded SVG in HTML for architecture diagrams that need:
-- Custom styling and colors
-- Precise layout control
-- Gradients and shadows
+Use React Flow + dagre for HTML diagrams that need one or more of the following:
 
-See [svg-architecture.md](references/svg-architecture.md) for component patterns.
+- Automatic layout
+- Stable node spacing and arrow routing
+- Long labels that must not overflow node boxes
+- Multi-stage focus switching
+- Step-based animation using active nodes, animated edges, and right-side detail panels
 
-### Key Components
-- **Rectangle boxes**: Services, components, modules
-- **Circles**: Start/end points
-- **Diamonds**: Conditions, decisions
-- **Arrows**: Data flow, relationships
-- **Dashed containers**: Groups, boundaries
+References:
 
-### Color Scheme
-See [color-schemes.md](references/color-schemes.md) for the dark theme palette:
-- Primary (cyan): `#00acc1` - Active states
-- Success (green): `#48bb78` - Complete states
-- Warning (orange): `#f6ad55` - Running states
-- Error (red): `#f56565` - Failed states
+- [react-flow-dagre-pattern.md](references/react-flow-dagre-pattern.md)
+- [animation-template.html](assets/animation-template.html) （作为唯一官方 React Flow + dagre 模板）
 
-## Animated Demos
+### Default Rules
 
-Use SVG + anime.js for interactive workflow demonstrations. Based on template: [animation-template.html](assets/animation-template.html)
+When producing complex HTML diagrams, follow these rules by default (use `assets/animation-template.html` as the canonical template and adapt it per diagram):
 
-### Features
-- Step-by-step playback control
-- Timeline panel showing execution progress
-- Data packet animations
-- State transitions with color changes
+1. Use React Flow for node and edge rendering.
+2. Use dagre for automatic layout.
+3. Keep node width and height consistent within the same diagram family.
+4. Put long explanations in side panels, not directly inside nodes.
+5. Use stage switching, node highlighting, and animated edges for animation.
+6. Export a screenshot after validation and embed the screenshot in Markdown with a link to the HTML.
 
-### When to Create Animated Demo
-- Explaining scheduler/executor workflows
-- Demonstrating algorithm execution
-- Showing system initialization sequences
-- Illustrating request processing pipelines
+### Do Not
 
-### Animation Structure
-1. Define SVG components (boxes, arrows, packets)
-2. Create step array with actions and messages
-3. Implement control functions (playStep, playAll, reset)
-4. Add timeline panel for progress tracking
+- Do not hand-draw complex node coordinates and arrow paths unless the diagram is truly tiny.
+- Do not use SVG + anime.js as the default animation path.
+- Do not let labels overflow node boxes.
+- Do not mix raw payload detail and top-level architecture labels in the same node.
 
 ## Output Guidelines
 
-### Mermaid Diagrams (Flowchart, ER, Sequence, etc.)
+### Mermaid Diagrams
+
 Write Mermaid code blocks directly in Markdown documents:
-```markdown
+
+````markdown
 ```mermaid
 flowchart TD
     A --> B
 ```
-```
+````
 
-### HTML Diagrams (Architecture, Animation)
-1. Create the `.html` file in project's docs or assets folder
-2. Take a screenshot of the diagram
-3. Embed in Markdown with screenshot + link:
+### React Flow HTML Diagrams
 
-```markdown
-![Architecture Diagram](./images/system-architecture.png)
+1. Create a single-file `.html` diagram based on `assets/animation-template.html`.
+2. Use React Flow + dagre from CDN imports.
+3. Validate the page in a browser.
+4. Take a screenshot of the final state or most representative stage.
+5. Embed screenshot + link in Markdown.
+
+Example:
+
+````markdown
+![Diagram](./images/system-architecture.png)
 
 [View interactive version](./docs/system-architecture.html)
-```
-
-For animated demos:
-```markdown
-![Scheduler Animation](./images/scheduler-demo.png)
-
-[View animation](./animations/scheduler-demo.html) - Supports step-by-step playback
-```
+````
 
 ### File Naming
+
 - Architecture: `{system}-architecture.html`
-- Animation: `{system}-{workflow}.html`
+- Interactive flow: `{system}-{workflow}.html`
 - Screenshots: `./images/{same-name}.png`
 
 ### HTML File Requirements
-- Include all CSS inline
-- Use CDN for anime.js
-- Make file self-contained (single file, no external dependencies)
-- Add Chinese/English labels as needed
+
+- Keep the file self-contained (single HTML file)
+- Inline CSS
+- Use CDN ESM imports for React, React Flow, and dagre
+- Support desktop width first, but do not break badly on mobile
+- Use Chinese/English labels as needed
+
+## Validation Checklist
+
+Before claiming a diagram is done, verify:
+
+- The page opens without console errors
+- Node labels do not overflow
+- Arrows and edge labels are readable
+- Active stage switching works
+- Screenshot is updated and matches the current HTML

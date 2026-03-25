@@ -1,448 +1,552 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{TITLE}}</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #fff;
-        }
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{TITLE}}</title>
+  <style>
+    @import url("https://esm.sh/@xyflow/react/dist/style.css");
 
-        /* === 布局 === */
-        .main-container {
-            display: grid;
-            grid-template-columns: 1fr 200px;
-            gap: 15px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .section-title {
-            font-size: 12px;
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .section-title::before {
-            content: '';
-            width: 3px;
-            height: 14px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
+    :root {
+      --bg: #06111f;
+      --panel: rgba(15, 23, 42, 0.9);
+      --border: rgba(148, 163, 184, 0.18);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --shadow: 0 30px 80px rgba(2, 8, 23, 0.42);
+    }
 
-        /* === 时间线面板 === */
-        .timeline-panel {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .timeline-title {
-            font-size: 12px;
-            color: var(--warning);
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        .timeline-item {
-            font-size: 10px;
-            padding: 6px 10px;
-            margin-bottom: 4px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.03);
-            color: #718096;
-            border-left: 2px solid #4a5568;
-            transition: all 0.3s;
-        }
-        .timeline-item.active {
-            background: rgba(var(--primary-rgb), 0.2);
-            color: var(--primary-light);
-            border-left-color: var(--primary);
-        }
-        .timeline-item.done {
-            background: rgba(72, 187, 120, 0.15);
-            color: #68d391;
-            border-left-color: #48bb78;
-        }
+    * { box-sizing: border-box; }
 
-        /* === 控制栏 === */
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 15px;
-            align-items: center;
-        }
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
-        }
-        button.step-btn {
-            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
-        }
-        button.step-btn:hover {
-            box-shadow: 0 4px 12px rgba(246, 173, 85, 0.4);
-        }
-        button.reset-btn {
-            background: linear-gradient(135deg, #718096, #4a5568);
-        }
-        .step-info {
-            font-size: 12px;
-            color: #a0aec0;
-            background: rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 6px;
-        }
-        .phase-display {
-            text-align: center;
-            margin-top: 12px;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            font-size: 13px;
-            border-left: 3px solid var(--primary);
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "PingFang SC", "SF Pro Display", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(168, 85, 247, 0.14), transparent 24%),
+        linear-gradient(180deg, #020617, #07111f 40%, #030712);
+    }
 
-        /* === SVG 组件样式 === */
-        .box {
-            fill: #2d3748;
-            stroke: #4a5568;
-            stroke-width: 2;
-            transition: all 0.3s;
-        }
-        .box.active {
-            fill: var(--primary);
-            stroke: var(--primary-light);
-            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
-        }
-        .box.running {
-            fill: var(--warning);
-            stroke: var(--warning-light);
-            filter: drop-shadow(0 0 8px rgba(246, 173, 85, 0.5));
-        }
-        .box.complete {
-            fill: var(--success);
-            stroke: var(--success-light);
-            filter: drop-shadow(0 0 8px rgba(72, 187, 120, 0.5));
-        }
-        .box.error {
-            fill: var(--error);
-            stroke: var(--error-light);
-            filter: drop-shadow(0 0 8px rgba(245, 101, 101, 0.5));
-        }
-        .box-label {
-            fill: #a0aec0;
-            font-size: 10px;
-            pointer-events: none;
-        }
-        .box.active .box-label,
-        .box.running .box-label,
-        .box.complete .box-label {
-            fill: #fff;
-        }
-        .small-label {
-            fill: #718096;
-            font-size: 8px;
-        }
+    .shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 32px 24px 40px;
+    }
 
-        /* === 箭头 === */
-        .arrow {
-            stroke: #4a5568;
-            stroke-width: 2;
-            fill: none;
-            marker-end: url(#arrowhead);
-        }
-        .arrow.active {
-            stroke: var(--primary);
-            marker-end: url(#arrowhead-primary);
-        }
-        .arrow.complete {
-            stroke: var(--success);
-            marker-end: url(#arrowhead-success);
-        }
+    .hero {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-        /* === 数据包动画 === */
-        .packet {
-            fill: #f6e05e;
-            filter: drop-shadow(0 0 6px rgba(246, 224, 94, 0.8));
-        }
+    .hero h1 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: 0.04em;
+    }
 
-        /* === 菱形（条件判断） === */
-        .diamond {
-            fill: #2d3748;
-            stroke: #4a5568;
-            stroke-width: 2;
-        }
-        .diamond.active {
-            fill: var(--warning);
-            stroke: var(--warning-light);
-            filter: drop-shadow(0 0 8px rgba(237, 137, 54, 0.5));
-        }
-        .diamond.complete {
-            fill: var(--success);
-            stroke: var(--success-light);
-        }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 920px;
+      font-size: 15px;
+    }
 
-        /* === 虚线边框（循环、并行区域） === */
-        .dashed-box {
-            fill: none;
-            stroke: var(--purple);
-            stroke-width: 2;
-            stroke-dasharray: 5,3;
-        }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) 360px;
+      gap: 20px;
+      align-items: start;
+    }
 
-        /* === CSS 变量 - 默认主题（青色） === */
-        :root {
-            --primary: #00acc1;
-            --primary-light: #26c6da;
-            --primary-dark: #0097a7;
-            --primary-rgb: 0, 172, 193;
-            --success: #48bb78;
-            --success-light: #68d391;
-            --warning: #f6ad55;
-            --warning-light: #fbd38d;
-            --warning-dark: #ed8936;
-            --error: #f56565;
-            --error-light: #fc8181;
-            --purple: #9f7aea;
-            --purple-light: #b794f4;
-        }
-    </style>
+    .diagram-panel,
+    .side-panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .diagram-panel { overflow: hidden; }
+
+    .diagram-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px 20px 0;
+    }
+
+    .diagram-header h2,
+    .side-panel h2,
+    .section-title {
+      margin: 0;
+    }
+
+    .diagram-header h2,
+    .side-panel h2 {
+      font-size: 18px;
+    }
+
+    .diagram-header p,
+    .side-panel p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .chips,
+    .stage-bar,
+    .player {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chips {
+      justify-content: flex-end;
+      min-width: 220px;
+    }
+
+    .chip,
+    .stage-button,
+    .player button,
+    .player .status {
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      background: rgba(15, 23, 42, 0.72);
+      color: var(--muted);
+      padding: 8px 12px;
+    }
+
+    .stage-bar,
+    .player {
+      padding: 18px 20px 0;
+    }
+
+    .stage-button,
+    .player button {
+      cursor: pointer;
+    }
+
+    .stage-button.active,
+    .player button:hover {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.92), rgba(125, 211, 252, 0.88));
+      color: #04111d;
+      border-color: transparent;
+    }
+
+    .flow-shell {
+      height: 640px;
+      padding: 18px 14px 14px;
+    }
+
+    .react-flow {
+      --xy-edge-stroke-default: rgba(148, 163, 184, 0.36);
+      --xy-edge-stroke-width-default: 2px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.34), transparent 42%);
+    }
+
+    .react-flow__renderer {
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .react-flow__attribution { display: none; }
+
+    .react-flow__controls {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: none;
+    }
+
+    .react-flow__controls-button {
+      background: transparent;
+      border-bottom-color: rgba(148, 163, 184, 0.12);
+      color: #cbd5e1;
+    }
+
+    .rf-node {
+      width: 252px;
+      min-height: 116px;
+      padding: 16px 18px 14px;
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.84));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .rf-node.dimmed {
+      opacity: 0.38;
+      transform: scale(0.98);
+    }
+
+    .rf-node.active {
+      opacity: 1;
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.88);
+      box-shadow: 0 18px 46px rgba(56, 189, 248, 0.16);
+    }
+
+    .rf-node .eyebrow {
+      font-size: 11px;
+      line-height: 1.2;
+      color: #7dd3fc;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .rf-node .title {
+      font-size: 18px;
+      line-height: 1.28;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .rf-node .subtitle,
+    .rf-node .hint {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    .rf-node .hint {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      font-size: 11px;
+      color: #dbe6f3;
+    }
+
+    .side-panel {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .summary,
+    .detail-list li,
+    .source-list li {
+      background: rgba(15, 23, 42, 0.58);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      border-radius: 16px;
+    }
+
+    .summary {
+      padding: 16px;
+    }
+
+    .summary .tag {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #7dd3fc;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: #f8fafc;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+
+    .detail-list,
+    .source-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .detail-list li,
+    .source-list li {
+      padding: 10px 12px;
+      color: #dbe6f3;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      color: #bfdbfe;
+      font-size: 12px;
+      line-height: 1.65;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-panel { position: static; }
+      .flow-shell { height: 600px; }
+    }
+  </style>
 </head>
 <body>
-    <h1>{{TITLE}}</h1>
-    <p class="subtitle">{{SUBTITLE}}</p>
+  <div id="app"></div>
 
-    <div class="main-container">
-        <div class="left-panel">
-            <!-- 内容区域 -->
-            <div class="section">
-                <div class="section-title">{{SECTION_TITLE}}</div>
-                <svg width="100%" height="200" viewBox="0 0 800 200">
-                    <defs>
-                        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                            <polygon points="0 0, 8 3, 0 6" fill="#4a5568"/>
-                        </marker>
-                        <marker id="arrowhead-primary" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                            <polygon points="0 0, 8 3, 0 6" fill="var(--primary)"/>
-                        </marker>
-                        <marker id="arrowhead-success" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-                            <polygon points="0 0, 8 3, 0 6" fill="var(--success)"/>
-                        </marker>
-                    </defs>
+  <script type="module">
+    import * as React from 'https://esm.sh/react@18.2.0'
+    import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client'
+    import dagre from 'https://esm.sh/dagre@0.8.5'
+    import htm from 'https://esm.sh/htm@3.1.1'
+    import {
+      ReactFlow,
+      Background,
+      Controls,
+      Handle,
+      MarkerType,
+      Position,
+      useEdgesState,
+      useNodesState,
+    } from 'https://esm.sh/@xyflow/react?deps=react@18.2.0,react-dom@18.2.0'
 
-                    <!-- 示例：组件盒子 -->
-                    <g id="box1">
-                        <rect class="box" x="50" y="80" width="80" height="40" rx="5"/>
-                        <text class="box-label" x="90" y="105" text-anchor="middle">Component</text>
-                    </g>
+    const html = htm.bind(React.createElement)
 
-                    <!-- 示例：箭头 -->
-                    <path class="arrow" d="M130,100 L180,100"/>
+    const stageConfigs = {{STAGES}}
+    const baseNodes = {{NODES}}
+    const baseEdges = {{EDGES}}
 
-                    <!-- 示例：数据包 -->
-                    <circle class="packet" id="packet1" cx="90" cy="100" r="4" opacity="0"/>
-                </svg>
+    function layoutGraph(nodes, edges) {
+      const dagreGraph = new dagre.graphlib.Graph()
+      dagreGraph.setDefaultEdgeLabel(() => ({}))
+      dagreGraph.setGraph({ rankdir: 'LR', ranksep: 96, nodesep: 40, marginx: 24, marginy: 24 })
+
+      nodes.forEach((node) => {
+        dagreGraph.setNode(node.id, {
+          width: node.data.width || 252,
+          height: node.data.height || 116,
+        })
+      })
+
+      edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target))
+      dagre.layout(dagreGraph)
+
+      return nodes.map((node) => {
+        const width = node.data.width || 252
+        const height = node.data.height || 116
+        const position = dagreGraph.node(node.id)
+
+        return {
+          ...node,
+          position: { x: position.x - width / 2, y: position.y - height / 2 },
+          sourcePosition: Position.Right,
+          targetPosition: Position.Left,
+        }
+      })
+    }
+
+    function InfoNode({ data }) {
+      const className = ['rf-node', data.active ? 'active' : '', data.dimmed ? 'dimmed' : '']
+        .filter(Boolean)
+        .join(' ')
+
+      return html`
+        <div className=${className}>
+          <${Handle} type="target" position=${Position.Left} style=${{ opacity: 0 }} />
+          <div className="eyebrow">${data.eyebrow}</div>
+          <div className="title">${data.title}</div>
+          <div className="subtitle">${data.subtitle}</div>
+          ${data.hint ? html`<div className="hint">${data.hint}</div>` : null}
+          <${Handle} type="source" position=${Position.Right} style=${{ opacity: 0 }} />
+        </div>
+      `
+    }
+
+    const nodeTypes = { info: InfoNode }
+
+    function buildGraph(activeStage) {
+      const stage = stageConfigs.find((item) => item.id === activeStage)
+
+      const nodes = baseNodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          active: stage.focusNodes.includes(node.id),
+          dimmed: !stage.focusNodes.includes(node.id),
+        },
+      }))
+
+      const edges = baseEdges.map((edge) => {
+        const active = stage.focusEdges.includes(edge.id)
+        return {
+          ...edge,
+          type: 'smoothstep',
+          animated: active,
+          labelStyle: {
+            fill: active ? '#e2e8f0' : '#64748b',
+            fontSize: 12,
+            fontWeight: 500,
+          },
+          labelBgStyle: {
+            fill: active ? 'rgba(2, 6, 23, 0.9)' : 'rgba(2, 6, 23, 0.42)',
+            fillOpacity: 1,
+          },
+          labelBgPadding: [8, 5],
+          labelBgBorderRadius: 8,
+          style: {
+            stroke: active ? '#7dd3fc' : 'rgba(148, 163, 184, 0.18)',
+            strokeWidth: active ? 2.6 : 1.6,
+          },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            width: 18,
+            height: 18,
+            color: active ? '#7dd3fc' : 'rgba(148, 163, 184, 0.28)',
+          },
+        }
+      })
+
+      return { nodes: layoutGraph(nodes, edges), edges }
+    }
+
+    function App() {
+      const [activeStage, setActiveStage] = React.useState(stageConfigs[0]?.id || 'stage-1')
+      const [autoPlay, setAutoPlay] = React.useState(false)
+      const stage = stageConfigs.find((item) => item.id === activeStage) || stageConfigs[0]
+      const graph = React.useMemo(() => buildGraph(activeStage), [activeStage])
+      const [nodes, setNodes, onNodesChange] = useNodesState(graph.nodes)
+      const [edges, setEdges, onEdgesChange] = useEdgesState(graph.edges)
+
+      React.useEffect(() => {
+        const nextGraph = buildGraph(activeStage)
+        setNodes(nextGraph.nodes)
+        setEdges(nextGraph.edges)
+      }, [activeStage, setEdges, setNodes])
+
+      React.useEffect(() => {
+        if (!autoPlay || stageConfigs.length <= 1) return undefined
+        const currentIndex = stageConfigs.findIndex((item) => item.id === activeStage)
+        const timer = window.setTimeout(() => {
+          const next = stageConfigs[(currentIndex + 1) % stageConfigs.length]
+          setActiveStage(next.id)
+        }, 1800)
+        return () => window.clearTimeout(timer)
+      }, [activeStage, autoPlay])
+
+      return html`
+        <div className="shell">
+          <section className="hero">
+            <h1>{{TITLE}}</h1>
+            <p>{{SUBTITLE}}</p>
+          </section>
+
+          <section className="layout">
+            <div className="diagram-panel">
+              <div className="diagram-header">
+                <div>
+                  <h2>${stage.headline}</h2>
+                  <p>${stage.summary}</p>
+                </div>
+                <div className="chips">
+                  <span className="chip">React Flow + dagre</span>
+                  <span className="chip">auto layout</span>
+                  <span className="chip">stage animation</span>
+                </div>
+              </div>
+
+              <div className="stage-bar">
+                ${stageConfigs.map((item) => html`
+                  <button
+                    className=${['stage-button', item.id === activeStage ? 'active' : ''].filter(Boolean).join(' ')}
+                    onClick=${() => setActiveStage(item.id)}
+                  >
+                    ${item.label}
+                  </button>
+                `)}
+              </div>
+
+              <div className="player">
+                <button onClick=${() => setAutoPlay((value) => !value)}>
+                  ${autoPlay ? '停止自动播放' : '自动播放'}
+                </button>
+                <div className="status">${stage.label}</div>
+              </div>
+
+              <div className="flow-shell">
+                <${ReactFlow}
+                  nodes=${nodes}
+                  edges=${edges}
+                  nodeTypes=${nodeTypes}
+                  onNodesChange=${onNodesChange}
+                  onEdgesChange=${onEdgesChange}
+                  fitView=${true}
+                  fitViewOptions=${{ padding: 0.18 }}
+                  nodesDraggable=${false}
+                  nodesConnectable=${false}
+                  elementsSelectable=${false}
+                  zoomOnScroll=${false}
+                  preventScrolling=${false}
+                  proOptions=${{ hideAttribution: true }}
+                >
+                  <${Background} color="rgba(148, 163, 184, 0.08)" gap=${28} />
+                  <${Controls} showInteractive=${false} />
+                </${ReactFlow}>
+              </div>
             </div>
+
+            <aside className="side-panel">
+              <div>
+                <h2>阅读引导</h2>
+                <p>{{GUIDE_TEXT}}</p>
+              </div>
+
+              <div className="summary">
+                <div className="tag">${stage.label}</div>
+                <p>${stage.summary}</p>
+              </div>
+
+              <div>
+                <h3 className="section-title">当前阶段重点</h3>
+                <ul className="detail-list">
+                  ${stage.highlights.map((item) => html`<li>${item}</li>`)}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="section-title">当前载荷</h3>
+                <pre>${stage.payload}</pre>
+              </div>
+
+              <div>
+                <h3 className="section-title">源码依据</h3>
+                <ul className="source-list">
+                  ${stage.sources.map((item) => html`<li>${item}</li>`)}
+                </ul>
+              </div>
+            </aside>
+          </section>
         </div>
+      `
+    }
 
-        <!-- 时间线 -->
-        <div class="timeline-panel">
-            <div class="timeline-title">Execution Timeline</div>
-            <div class="timeline-item" id="t1">1. Step 1</div>
-            <div class="timeline-item" id="t2">2. Step 2</div>
-            <div class="timeline-item" id="t3">3. Step 3</div>
-        </div>
-    </div>
-
-    <div class="phase-display" id="phase">Click play to start...</div>
-
-    <div class="controls">
-        <button onclick="playAll()">&#9654; Play All</button>
-        <button class="step-btn" onclick="playStep()">&#9197; Step</button>
-        <span class="step-info">Step: <span id="step-num">0</span> / <span id="total-steps">3</span></span>
-        <button class="reset-btn" onclick="resetAnimation()">Reset</button>
-    </div>
-
-    <script>
-        let currentStep = 0;
-        const totalSteps = 3;
-        let isPlaying = false;
-
-        // === 工具函数 ===
-        function setPhase(text) {
-            document.getElementById('phase').innerHTML = text;
-        }
-
-        function updateStepNum() {
-            document.getElementById('step-num').textContent = currentStep;
-        }
-
-        function highlightTimeline(num) {
-            document.querySelectorAll('.timeline-item').forEach((item, i) => {
-                item.classList.remove('active');
-                if (i < num) item.classList.add('done');
-            });
-            if (num > 0 && num <= totalSteps) {
-                document.getElementById('t' + num).classList.add('active');
-            }
-        }
-
-        function activateBox(id) {
-            const el = document.querySelector('#' + id + ' .box');
-            if (el) el.classList.add('active');
-        }
-
-        function completeBox(id) {
-            const el = document.querySelector('#' + id + ' .box');
-            if (el) {
-                el.classList.remove('active', 'running');
-                el.classList.add('complete');
-            }
-        }
-
-        function showPacket(id, show) {
-            document.getElementById(id).style.opacity = show ? 1 : 0;
-        }
-
-        function movePacket(id, x, y) {
-            const el = document.getElementById(id);
-            anime({
-                targets: el,
-                cx: x,
-                cy: y !== undefined ? y : el.getAttribute('cy'),
-                duration: 300,
-                easing: 'easeOutQuad'
-            });
-        }
-
-        // === 步骤定义 ===
-        const steps = [
-            {
-                action: () => {
-                    activateBox('box1');
-                    showPacket('packet1', true);
-                },
-                msg: '1. <b>Step 1</b> - Component activated',
-                timeline: 1
-            },
-            {
-                action: () => {
-                    movePacket('packet1', 150, 100);
-                },
-                msg: '2. <b>Step 2</b> - Data flowing',
-                timeline: 2
-            },
-            {
-                action: () => {
-                    completeBox('box1');
-                    showPacket('packet1', false);
-                },
-                msg: '3. <b>Step 3</b> - Complete',
-                timeline: 3
-            }
-        ];
-
-        // === 控制函数 ===
-        function playStep() {
-            if (isPlaying || currentStep >= totalSteps) return;
-            currentStep++;
-            updateStepNum();
-            const step = steps[currentStep - 1];
-            step.action();
-            setPhase(step.msg);
-            highlightTimeline(step.timeline);
-        }
-
-        async function playAll() {
-            if (isPlaying) return;
-            isPlaying = true;
-
-            while (currentStep < totalSteps) {
-                currentStep++;
-                updateStepNum();
-                const step = steps[currentStep - 1];
-                step.action();
-                setPhase(step.msg);
-                highlightTimeline(step.timeline);
-                await new Promise(r => setTimeout(r, 800));
-            }
-
-            isPlaying = false;
-        }
-
-        function resetAnimation() {
-            currentStep = 0;
-            isPlaying = false;
-            updateStepNum();
-            setPhase('Click play to start...');
-
-            // Reset all boxes
-            document.querySelectorAll('.box, .diamond').forEach(el => {
-                el.classList.remove('active', 'running', 'complete', 'error');
-            });
-
-            // Reset packets
-            document.querySelectorAll('.packet').forEach(el => {
-                el.style.opacity = 0;
-            });
-
-            // Reset timeline
-            document.querySelectorAll('.timeline-item').forEach(item => {
-                item.classList.remove('active', 'done');
-            });
-        }
-
-        // Initialize
-        document.getElementById('total-steps').textContent = totalSteps;
-    </script>
+    createRoot(document.getElementById('app')).render(html`<${App} />`)
+  </script>
 </body>
 </html>
