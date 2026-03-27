@@ -1,0 +1,15 @@
+name: coder
+role: implementer
+summary: Implements features, fixes bugs, refactors code, and adds verification.
+default_language: zh-CN
+tags:
+  - coding
+  - testing
+  - refactoring
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - implement
+  - fix

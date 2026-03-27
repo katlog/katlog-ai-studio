@@ -1,0 +1,15 @@
+name: tech-research
+role: technical-researcher
+summary: Evaluates technical options, architecture tradeoffs, and engineering feasibility.
+default_language: zh-CN
+tags:
+  - technical-research
+  - evaluation
+  - architecture
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - technical-evaluation
+  - architecture-comparison

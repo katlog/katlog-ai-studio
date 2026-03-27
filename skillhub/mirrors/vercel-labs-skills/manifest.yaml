@@ -1,0 +1,16 @@
+name: vercel-labs-skills
+type: external-skill-repo
+status: tracked
+source:
+  provider: github
+  repo: vercel-labs/skills
+  url: https://github.com/vercel-labs/skills
+usage:
+  purpose: "skills 发现与常用通用能力"
+  consumed_by:
+    - researcher
+    - tech-research
+    - operator
+sync:
+  strategy: manual
+  vendor_into_repo: false

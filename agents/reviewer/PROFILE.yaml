@@ -1,0 +1,15 @@
+name: reviewer
+role: code-reviewer
+summary: Reviews changes for bugs, regressions, risks, and missing tests.
+default_language: zh-CN
+tags:
+  - review
+  - risk
+  - regression
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - review
+  - audit

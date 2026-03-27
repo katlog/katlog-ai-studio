@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Claude Code Skills 一键安装脚本
-# 自动安装常用的 Skills 到 ~/.claude/skills 目录
+# 外部 Skills 一键安装脚本
+# 只负责安装外部依赖到 ~/.claude/skills
+# 本仓库自带的本地 skills 已迁移到 skillhub/local
 
 # 颜色定义
 GREEN='\033[0;32m'
@@ -72,7 +73,7 @@ install_skill() {
 main() {
     echo ""
     echo "======================================"
-    echo "  Claude Code Skills 一键安装工具"
+    echo "  External Skills Installer"
     echo "======================================"
     echo ""
 
@@ -127,16 +128,16 @@ main() {
     echo ""
 
     # 列出已安装的 Skills
-    print_info "当前已安装的 Skills:"
+    print_info "当前已安装的外部 Skills:"
     echo ""
     ls -1 "$SKILLS_DIR" | grep -v "^\.DS_Store$" | while read -r skill; do
         echo "  • $skill"
     done
     echo ""
 
-    print_success "所有操作完成！"
+    print_success "外部 Skills 安装完成"
     echo ""
-    echo "提示: 重启 Claude Code 以加载新安装的 Skills"
+    echo "提示: 本地 skills 在仓库的 skillhub/local 中；外部 skills 安装后需要重启宿主以重新加载"
     echo ""
 }
 

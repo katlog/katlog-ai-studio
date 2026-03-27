@@ -1,0 +1,9 @@
+network_access: limited
+file_write: workspace
+risky_operations: ask-first
+preferred_tools:
+  - exec_command
+  - rg
+  - apply_patch
+forbidden_patterns:
+  - destructive-reset

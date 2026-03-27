@@ -1,0 +1,12 @@
+name: template
+role: template
+summary: Describe the agent in one sentence.
+default_language: zh-CN
+tags:
+  - template
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - default

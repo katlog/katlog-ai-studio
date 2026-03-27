@@ -1,0 +1,7 @@
+network_access: limited
+file_write: workspace
+risky_operations: ask-first
+preferred_tools: []
+forbidden_patterns:
+  - destructive-reset
+  - implicit-network-write

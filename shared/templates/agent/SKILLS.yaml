@@ -1,0 +1,6 @@
+defaults: []
+optional: []
+disabled: []
+rules:
+  - "优先使用本地 personal skillhub 中的 skills"
+  - "只有在职责匹配时才启用对应 skills"

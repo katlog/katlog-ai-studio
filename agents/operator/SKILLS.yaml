@@ -1,0 +1,10 @@
+defaults:
+  - skill-installer
+  - writing-skills
+  - skill-creator
+optional:
+  - summarization
+disabled: []
+rules:
+  - "涉及 skill 管理时优先使用 skill-installer"
+  - "涉及 skill 结构调整时优先遵循 writing-skills"

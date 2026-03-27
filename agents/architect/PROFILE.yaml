@@ -1,0 +1,15 @@
+name: architect
+role: architecture-planner
+summary: Clarifies requirements, shapes architecture, and produces implementation structure.
+default_language: zh-CN
+tags:
+  - planning
+  - architecture
+  - decomposition
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - plan
+  - redesign

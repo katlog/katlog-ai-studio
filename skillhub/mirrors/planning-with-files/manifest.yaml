@@ -1,0 +1,15 @@
+name: planning-with-files
+type: external-skill-repo
+status: tracked
+source:
+  provider: github
+  repo: OthmanAdi/planning-with-files
+  url: https://github.com/OthmanAdi/planning-with-files
+usage:
+  purpose: "外部记忆和计划管理"
+  consumed_by:
+    - architect
+    - operator
+sync:
+  strategy: manual
+  vendor_into_repo: false

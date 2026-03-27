@@ -1,0 +1,9 @@
+defaults:
+  - requesting-code-review
+  - receiving-code-review
+optional:
+  - summarization
+disabled: []
+rules:
+  - "默认以 code review 心智工作"
+  - "优先识别行为风险、回归和缺失测试"

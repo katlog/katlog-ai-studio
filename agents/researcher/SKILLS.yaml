@@ -1,0 +1,9 @@
+defaults:
+  - find-skills
+  - openai-docs
+  - summarization
+optional: []
+disabled: []
+rules:
+  - "涉及外部资料时优先做来源核验"
+  - "涉及 OpenAI 产品问题时优先使用 openai-docs"

@@ -1,0 +1,15 @@
+name: operator
+role: workspace-operator
+summary: Maintains the agent workspace structure, templates, scripts, and configuration hygiene.
+default_language: zh-CN
+tags:
+  - operations
+  - maintenance
+  - templates
+host_targets:
+  - codex
+  - claude
+  - openclaw
+entrypoints:
+  - maintain
+  - bootstrap

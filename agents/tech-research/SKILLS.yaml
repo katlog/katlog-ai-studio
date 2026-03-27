@@ -1,0 +1,10 @@
+defaults:
+  - summarization
+  - openai-docs
+optional:
+  - find-skills
+  - tech-diagram
+disabled: []
+rules:
+  - "调研前先定义评价标准"
+  - "输出推荐时同时保留 trade-offs"

@@ -1,0 +1,16 @@
+name: superpowers
+type: external-skill-repo
+status: tracked
+source:
+  provider: github
+  repo: obra/superpowers
+  url: https://github.com/obra/superpowers
+usage:
+  purpose: "核心开发工作流框架"
+  consumed_by:
+    - architect
+    - coder
+    - reviewer
+sync:
+  strategy: manual
+  vendor_into_repo: false

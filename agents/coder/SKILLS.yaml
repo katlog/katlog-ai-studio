@@ -1,0 +1,10 @@
+defaults:
+  - test-driven-development
+  - systematic-debugging
+  - verification-before-completion
+optional:
+  - java-code-simplifier
+disabled: []
+rules:
+  - "涉及缺陷时优先使用 systematic-debugging"
+  - "涉及实现时优先遵循 test-driven-development"

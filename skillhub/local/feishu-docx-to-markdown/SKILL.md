@@ -33,13 +33,13 @@ npm install --prefix . playwright
 Run:
 
 ```bash
-node skills/feishu-docx-to-markdown/scripts/feishu-docx-to-md.mjs "<feishu_docx_url>" [output_dir]
+node skillhub/local/feishu-docx-to-markdown/scripts/feishu-docx-to-md.mjs "<feishu_docx_url>" [output_dir]
 ```
 
 Example:
 
 ```bash
-node skills/feishu-docx-to-markdown/scripts/feishu-docx-to-md.mjs \
+node skillhub/local/feishu-docx-to-markdown/scripts/feishu-docx-to-md.mjs \
   "https://my.feishu.cn/docx/OxIrdx6y1ovGLixGLHqczQ5enrb" \
   "./output"
 ```

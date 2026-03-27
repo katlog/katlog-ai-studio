@@ -1,0 +1,10 @@
+defaults:
+  - brainstorming
+  - writing-plans
+  - tech-diagram
+optional:
+  - summarization
+disabled: []
+rules:
+  - "需求不清时优先使用 brainstorming"
+  - "形成可执行方案后使用 writing-plans"

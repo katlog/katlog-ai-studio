@@ -1,0 +1,9 @@
+network_access: limited
+file_write: cautious
+risky_operations: ask-first
+preferred_tools:
+  - exec_command
+  - rg
+forbidden_patterns:
+  - destructive-reset
+  - speculative-approval

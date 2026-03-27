@@ -1,0 +1,8 @@
+network_access: enabled
+file_write: workspace
+risky_operations: ask-first
+preferred_tools:
+  - web
+  - exec_command
+forbidden_patterns:
+  - uncited-latest-claims
