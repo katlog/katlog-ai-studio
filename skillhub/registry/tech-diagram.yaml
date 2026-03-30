@@ -1,0 +1,12 @@
+name: tech-diagram
+source: local
+status: active
+hosts:
+  - claude
+  - codex
+  - opencode
+method: adapter-export
+weight: medium
+fit: technical diagrams, architecture sketches, flowcharts
+alternatives: []
+notes: "本地自建 skill；适合技术图、流程图、结构图等输出。"

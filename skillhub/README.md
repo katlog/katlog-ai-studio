@@ -7,6 +7,7 @@
 - 维护我自己创建和长期维护的本地 skills
 - 收藏、筛选、整理值得长期参考的 skill 资源
 - 受控纳管常用的外部 skill 仓库
+- 统一记录 skill 的状态、宿主目标和替代关系
 
 ## 目录结构
 
@@ -17,6 +18,18 @@
 - [catalog/curated.md](./catalog/curated.md)：精选 skill 与仓库
 - [catalog/favorites.md](./catalog/favorites.md)：我最常用的 skills 和来源
 - [catalog/external-repos.md](./catalog/external-repos.md)：外部仓库索引与说明
+
+### `registry/`
+
+技能账本层。这里不放 skill 实体，而是记录每个 skill 的：
+
+- 当前状态
+- 宿主目标
+- 维护方式
+- 使用负担
+- 替代关系
+
+详细说明见 [registry/README.md](./registry/README.md)。
 
 ### `local/`
 

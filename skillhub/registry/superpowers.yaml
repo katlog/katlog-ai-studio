@@ -1,0 +1,13 @@
+name: superpowers
+source: obra/superpowers
+status: active
+hosts:
+  - claude
+  - opencode
+method: npx-skills
+weight: heavy
+fit: complex engineering tasks, multi-step development workflows
+alternatives:
+  - planning-with-files
+  - task-planning
+notes: "适合复杂任务；简单任务容易过度设计，不建议作为默认工作流。"

@@ -1,0 +1,11 @@
+name: vercel-labs-skills
+source: vercel-labs/skills
+status: active
+hosts:
+  - claude
+  - opencode
+method: npx-skills
+weight: medium
+fit: skill discovery, general utility skills, ecosystem integration
+alternatives: []
+notes: "主要提供 find-skills 等基础能力；更像通用工具箱而不是单一 workflow skill。"

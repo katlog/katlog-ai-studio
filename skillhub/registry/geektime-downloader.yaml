@@ -1,0 +1,12 @@
+name: geektime-downloader
+source: local
+status: active
+hosts:
+  - claude
+  - codex
+  - opencode
+method: adapter-export
+weight: medium
+fit: course archiving, transcript generation, content summarization
+alternatives: []
+notes: "本地自建 skill；偏内容归档和整理，不是通用开发技能。"

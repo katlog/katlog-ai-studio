@@ -1,0 +1,12 @@
+name: planning-with-files
+source: othmanadi/planning-with-files
+status: active
+hosts:
+  - claude
+  - opencode
+method: npx-skills
+weight: medium
+fit: medium-complex planning, external memory, structured execution
+alternatives:
+  - task-planning
+notes: "比 superpowers 更轻；适合中等复杂度任务和需要外部记忆的场景。"

@@ -1,0 +1,12 @@
+name: feishu-docx-to-markdown
+source: local
+status: active
+hosts:
+  - claude
+  - codex
+  - opencode
+method: adapter-export
+weight: medium
+fit: feishu docx export, knowledge archiving, markdown conversion
+alternatives: []
+notes: "本地自建 skill；适合把飞书文档稳定沉淀到本地 Markdown。"
