@@ -132,6 +132,10 @@ Avoid:
 - Keep edge labels short
 - Use at most 3 to 4 visual themes in one diagram
 - Default to desktop-first layout with a usable mobile fallback
+- Default to a light theme unless the target project already uses a dark visual system
+- Keep nodes draggable so manual spacing can be adjusted after auto layout
+- Use high-contrast edge strokes and readable edge-label backgrounds
+- Keep the canvas clean by default; do not render background grid lines unless the user explicitly asks for them
 
 ## Validation Checklist
 
